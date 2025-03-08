@@ -109,7 +109,7 @@
 				indovinate++;
 				media_tempi/=indovinate;}
 			console.log(indovinate,fatte,media_tempi);
-            document.getElementById("time").innerText = `Tempo trascorso: ${elapsedSeconds.toFixed(2)} secondi\nIndovinate ${indovinate} su ${fatte}, ${(indovinate/fatte).toFixed(2)} % \nMedia tempi: ${media_tempi.toFixed(2)}`; 
+            document.getElementById("time").innerText = `Tempo trascorso: ${elapsedSeconds.toFixed(2)} secondi\nIndovinate ${indovinate} su ${fatte}, ${(indovinate/fatte*100).toFixed(2)} % \nMedia tempi: ${media_tempi.toFixed(2)}`; 
 			
 			test(day, month-1, year);
         }
