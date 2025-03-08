@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generatore di Date Casuali</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+            font-size: 20px;
+        }
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px auto;
+        }
+        h1 {
+            font-size: 28px;
+        }
+        p {
+            font-size: 22px;
+        }
+        select {
+            padding: 10px;
+            font-size: 18px;
+			margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Generatore di Date Casuali</h1>
+    <button onclick="startProcess()">Genera Data Casuale</button>
+    <p id="date"></p>
+    <select id="weekday" style="display:none;">
+        <option value="Lunedì">Lunedì</option>
+        <option value="Martedì">Martedì</option>
+        <option value="Mercoledì">Mercoledì</option>
+        <option value="Giovedì">Giovedì</option>
+        <option value="Venerdì">Venerdì</option>
+        <option value="Sabato">Sabato</option>
+        <option value="Domenica">Domenica</option>
+    </select>
+    <button id="stop" onclick="stopTimer()" style="display:none;">Ferma Timer</button>
+    <p id="day"></p>
+    <p id="time"></p>
+
+    <script>
+        let startTime;
+		let indovinate=0;
+		let fatte=0;
+		let media_tempi=0;
+        
+        function randomDate() {
+			const anno_ini = 2025;
+			const anno_fine = 2025;
+            let year = Math.floor(Math.random() * (anno_fine - anno_ini + 1)) + anno_ini;
+            let month = Math.floor(Math.random() * 12) + 1;
+            let day;
+            
+            if ([1, 3, 5, 7, 8, 10, 12].includes(month)) {
+                day = Math.floor(Math.random() * 31) + 1;
+            } else if ([4, 6, 9, 11].includes(month)) {
+                day = Math.floor(Math.random() * 30) + 1;
+            } else {
+                let isLeap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+                day = Math.floor(Math.random() * (isLeap ? 29 : 28)) + 1;
+            }
+            
+            return { date: `${day}/${month}/${year}`, day, month, year };
+        }
+
+        function getDayOfWeek(year, month, day) {
+            let date = new Date(year, month - 1, day);
+            let days = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+            return days[date.getDay()];
+        }
+
+        function startProcess() {
+            document.getElementById("time").style.display = "none";
+            document.getElementById("day").style.display = "none";
+            let dateObj = randomDate();
+            document.getElementById("date").innerText = `${dateObj.date}`;
+            document.getElementById("day").dataset.year = dateObj.year;
+            document.getElementById("day").dataset.month = dateObj.month;
+            document.getElementById("day").dataset.day = dateObj.day;
+            startTime = Date.now();
+            document.getElementById("stop").style.display = "block";
+            document.getElementById("weekday").style.display = "block";
+        }
+
+        function stopTimer() {
+			document.getElementById("stop").style.display = "none";
+            document.getElementById("time").style.display = "block";
+            document.getElementById("day").style.display = "block";
+            let endTime = Date.now();
+            let elapsedSeconds = (endTime - startTime) / 1000;
+            let year = document.getElementById("day").dataset.year;
+            let month = document.getElementById("day").dataset.month;
+            let day = document.getElementById("day").dataset.day;
+            let dayOfWeek = getDayOfWeek(year, month, day);
+            document.getElementById("day").innerText = `${dayOfWeek}`;
+			fatte++;
+			if (document.getElementById("weekday").value == dayOfWeek){
+				media_tempi*=indovinate;
+				media_tempi+=elapsedSeconds;
+				indovinate++;
+				media_tempi/=indovinate;}
+			console.log(indovinate,fatte,media_tempi);
+            document.getElementById("time").innerText = `Tempo trascorso: ${elapsedSeconds.toFixed(2)} secondi\nIndovinate ${indovinate} su ${fatte}, ${(indovinate/fatte).toFixed(2)} % \nMedia tempi: ${media_tempi.toFixed(2)}`; 
+			
+			test(day, month-1, year);
+        }
+
+		function test(a, b, year) {
+			let days = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+			const isLeap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+			let mesi=[3,0,0,4,2,6,4,1,5,3,0,5];
+			let mesib=[4,1,0,4,2,6,4,1,5,3,0,5];
+			let dif;
+			if (isLeap) dif = Math.round((a-mesib[b])/7)*7+mesib[b]
+			else dif = Math.round((a-mesi[b])/7)*7+mesi[b];
+			if (dif>31) dif-=7;
+			if (dif<1) dif+=7;
+			console.log("la data più vicina",dif);
+			console.log(a-dif);
+			if (year>1999){
+				console.log((year-2000)%7);
+				console.log((Math.floor((year-2000)/4))%7);
+				console.log(2);
+				console.log("finale", a-dif+(year-2000)%7+(Math.floor((year-2000)/4))%7+2);
+				console.log("riporta", (a-dif+(year-2000)%7+(Math.floor((year-2000)/4))%7+2)%7);
+				console.log(days[(a-dif+(year-2000)%7+(Math.floor((year-2000)/4))%7+2)%7]);
+				}
+		}
+    </script>
+</body>
+</html>
