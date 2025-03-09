@@ -101,7 +101,7 @@
             let month = document.getElementById("day").dataset.month;
             let day = document.getElementById("day").dataset.day;
             let dayOfWeek = getDayOfWeek(year, month, day);
-            document.getElementById("day").innerText = `${dayOfWeek}`;
+            document.getElementById("day").innerText = `${dayOfWeek}\nTempo impiegato: ${elapsedSeconds.toFixed(2)} secondi`;
 			fatte++;
 			if (document.getElementById("weekday").value == dayOfWeek){
 				media_tempi*=indovinate;
@@ -109,7 +109,7 @@
 				indovinate++;
 				media_tempi/=indovinate;}
 			console.log(indovinate,fatte,media_tempi);
-            document.getElementById("time").innerText = `Tempo trascorso: ${elapsedSeconds.toFixed(2)} secondi\nIndovinate ${indovinate} su ${fatte}, ${(indovinate/fatte*100).toFixed(2)} % \nMedia tempi: ${media_tempi.toFixed(2)}`; 
+            document.getElementById("time").innerText = `Indovinate ${indovinate} su ${fatte}, ${(indovinate/fatte*100).toFixed(2)} % \nMedia tempi: ${media_tempi.toFixed(2)}`; 
 			
 			test(day, month-1, year);
         }
