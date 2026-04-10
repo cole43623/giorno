@@ -5,57 +5,238 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generatore di Date Casuali</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --btn-primary: #3498db;
+            --btn-primary-hover: #2980b9;
+            --btn-secondary: #95a5a6;
+            --btn-secondary-hover: #7f8c8d;
+            --accent: #2c3e50;
+        }
+
+        html.dark-mode {
+            --bg-primary: #1e1e1e;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #e8e8e8;
+            --text-secondary: #b0b0b0;
+            --border-color: #404040;
+            --btn-primary: #3498db;
+            --btn-primary-hover: #2980b9;
+            --accent: #ecf0f1;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 50px;
-            font-size: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
         }
-        button {
-            padding: 15px 25px;
-            font-size: 18px;
-            cursor: pointer;
-            margin: 10px auto;
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            padding: 40px 20px;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
         h1 {
-            font-size: 28px;
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 0;
         }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--btn-secondary);
+            transform: scale(1.1);
+        }
+
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background-color: var(--btn-primary);
+            color: white;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            background-color: var(--btn-primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #stop {
+            background-color: #e74c3c;
+        }
+
+        #stop:hover {
+            background-color: #c0392b;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
         p {
-            font-size: 22px;
-        }
-        select {
-            padding: 10px;
             font-size: 18px;
-			margin: 10px auto;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            min-height: 24px;
+        }
+
+        #date {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        #day {
+            font-size: 20px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        #time {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        select {
+            padding: 10px 15px;
+            font-size: 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        select:hover {
+            border-color: var(--btn-primary);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--btn-primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <h1>Generatore di Date Casuali</h1>
-    <button onclick="startProcess()">Genera Data Casuale</button>
-    <p id="date"></p>
-    <select id="weekday" style="display:none;">
-        <option value="Lunedì">Lunedì</option>
-        <option value="Martedì">Martedì</option>
-        <option value="Mercoledì">Mercoledì</option>
-        <option value="Giovedì">Giovedì</option>
-        <option value="Venerdì">Venerdì</option>
-        <option value="Sabato">Sabato</option>
-        <option value="Domenica">Domenica</option>
-    </select>
-    <button id="stop" onclick="stopTimer()" style="display:none;">Ferma Timer</button>
-    <p id="day"></p>
-    <p id="time"></p>
+    <div class="container">
+        <div class="header">
+            <h1>Generatore di Date</h1>
+            <button class="theme-toggle" id="themeToggle" aria-label="Cambia tema">🌙</button>
+        </div>
+        <div class="content">
+            <button onclick="startProcess()">Genera Data Casuale</button>
+            <p id="date"></p>
+            <div class="center">
+                <select id="weekday" style="display:none;">
+                    <option value="Lunedì">Lunedì</option>
+                    <option value="Martedì">Martedì</option>
+                    <option value="Mercoledì">Mercoledì</option>
+                    <option value="Giovedì">Giovedì</option>
+                    <option value="Venerdì">Venerdì</option>
+                    <option value="Sabato">Sabato</option>
+                    <option value="Domenica">Domenica</option>
+                </select>
+            </div>
+            <button id="stop" onclick="stopTimer()" style="display:none;">Ferma Timer</button>
+            <p id="day"></p>
+            <p id="time"></p>
+        </div>
+    </div>
 
     <script>
         let startTime;
-		let indovinate=0;
-		let fatte=0;
-		let media_tempi=0;
+        let indovinate = 0;
+        let fatte = 0;
+        let media_tempi = 0;
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        // Load saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        if (savedTheme === 'dark') {
+            htmlElement.classList.add('dark-mode');
+            themeToggle.textContent = '☀️';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark-mode');
+            const isDark = htmlElement.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            themeToggle.textContent = isDark ? '☀️' : '🌙';
+        });
         
         function randomDate() {
-			const anno_ini = 2025;
-			const anno_fine = 2025;
+            const anno_ini = 2026;
+            const anno_fine = 2026;
             let year = Math.floor(Math.random() * (anno_fine - anno_ini + 1)) + anno_ini;
             let month = Math.floor(Math.random() * 12) + 1;
             let day;
@@ -82,6 +263,7 @@
             document.getElementById("time").style.display = "none";
             document.getElementById("day").style.display = "none";
             let dateObj = randomDate();
+            console.log(dateObj.date);
             document.getElementById("date").innerText = `${dateObj.date}`;
             document.getElementById("day").dataset.year = dateObj.year;
             document.getElementById("day").dataset.month = dateObj.month;
@@ -92,7 +274,7 @@
         }
 
         function stopTimer() {
-			document.getElementById("stop").style.display = "none";
+            document.getElementById("stop").style.display = "none";
             document.getElementById("time").style.display = "block";
             document.getElementById("day").style.display = "block";
             let endTime = Date.now();
@@ -102,39 +284,40 @@
             let day = document.getElementById("day").dataset.day;
             let dayOfWeek = getDayOfWeek(year, month, day);
             document.getElementById("day").innerText = `${dayOfWeek}\nTempo impiegato: ${elapsedSeconds.toFixed(2)} secondi`;
-			fatte++;
-			if (document.getElementById("weekday").value == dayOfWeek){
-				media_tempi*=indovinate;
-				media_tempi+=elapsedSeconds;
-				indovinate++;
-				media_tempi/=indovinate;}
-			console.log(indovinate,fatte,media_tempi);
+            fatte++;
+            if (document.getElementById("weekday").value == dayOfWeek){
+                media_tempi*=indovinate;
+                media_tempi+=elapsedSeconds;
+                indovinate++;
+                media_tempi/=indovinate;
+            }
+            console.log(indovinate,fatte,media_tempi);
             document.getElementById("time").innerText = `Indovinate ${indovinate} su ${fatte}, ${(indovinate/fatte*100).toFixed(2)} % \nMedia tempi: ${media_tempi.toFixed(2)}`; 
-			
-			test(day, month-1, year);
+            
+            test(day, month-1, year);
         }
 
-		function test(a, b, year) {
-			let days = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
-			const isLeap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
-			let mesi=[3,0,0,4,2,6,4,1,5,3,0,5];
-			let mesib=[4,1,0,4,2,6,4,1,5,3,0,5];
-			let dif;
-			if (isLeap) dif = Math.round((a-mesib[b])/7)*7+mesib[b]
-			else dif = Math.round((a-mesi[b])/7)*7+mesi[b];
-			if (dif>31) dif-=7;
-			if (dif<1) dif+=7;
-			console.log("la data più vicina",dif);
-			console.log(a-dif);
-			if (year>1999){
-				console.log((year-2000)%7);
-				console.log((Math.floor((year-2000)/4))%7);
-				console.log(2);
-				console.log("finale", a-dif+(year-2000)%7+(Math.floor((year-2000)/4))%7+2);
-				console.log("riporta", (a-dif+(year-2000)%7+(Math.floor((year-2000)/4))%7+2)%7);
-				console.log(days[(a-dif+(year-2000)%7+(Math.floor((year-2000)/4))%7+2)%7]);
-				}
-		}
+        function test(a, b, year) {
+            let days = ["Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"];
+            const isLeap = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+            let mesi=[3,0,0,4,2,6,4,1,5,3,0,5];
+            let mesib=[4,1,0,4,2,6,4,1,5,3,0,5];
+            let dif;
+            if (isLeap) dif = Math.round((a-mesib[b])/7)*7+mesib[b]
+            else dif = Math.round((a-mesi[b])/7)*7+mesi[b];
+            if (dif>31) dif-=7;
+            if (dif<1) dif+=7;
+            console.log("la data più vicina",dif);
+            console.log(a-dif);
+            if (year>1999){
+                console.log((year-2000)%7);
+                console.log((Math.floor((year-2000)/4))%7);
+                console.log(2);
+                console.log("finale", a-dif+(year-2000)%7+(Math.floor((year-2000)/4))%7+2);
+                console.log("riporta", (a-dif+(year-2000)%7+(Math.floor((year-2000)/4))%7+2)%7);
+                console.log(days[(a-dif+(year-2000)%7+(Math.floor((year-2000)/4))%7+2)%7]);
+            }
+        }
     </script>
 </body>
 </html>
